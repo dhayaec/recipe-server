@@ -27,22 +27,17 @@ async function bootstrap() {
       cache: true,
     };
 
-    // create TypeORM connection
     await TypeORM.createConnection(dbOptions);
 
-    // seed database with some data
     const { defaultUser } = await seedDatabase();
 
-    // build TypeGraphQL executable schema
     const schema = await TypeGraphQL.buildSchema({
       resolvers: [RecipeResolver],
       container: Container,
     });
 
-    // create mocked context
     const context: Context = { user: defaultUser };
 
-    // Create GraphQL server
     const server = new ApolloServer({
       schema,
       context,
@@ -51,7 +46,6 @@ async function bootstrap() {
       },
     });
 
-    // Start the server
     const { url } = await server.listen(4000);
     console.info(`Server is running ${url}`);
   } catch (err) {
