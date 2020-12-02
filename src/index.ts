@@ -18,7 +18,7 @@ async function bootstrap() {
   try {
     const dbOptions: TypeORM.ConnectionOptions = {
       type: 'sqlite',
-      database: `${path.join(__dirname, 'db')}/db.sqlite`,
+      database: `${path.join(__dirname, '../', 'db')}/db.sqlite`,
       entities: [Recipe, Rate, User],
       synchronize: true,
       logger: 'advanced-console',
