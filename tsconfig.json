@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "ESNEXT",
+    "target": "ES2019",
     "module": "commonjs",
     "sourceMap": true,
     "lib": ["es2018", "esnext.asynciterable"],

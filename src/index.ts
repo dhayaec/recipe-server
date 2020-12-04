@@ -1,16 +1,12 @@
 import 'reflect-metadata';
+import path from 'path';
 import { ApolloServer } from 'apollo-server';
 import { Container } from 'typedi';
 import * as TypeORM from 'typeorm';
-import * as TypeGraphQL from 'type-graphql';
 
-import path from 'path';
-import { RecipeResolver } from './resolvers/recipe-resolver';
-import { Recipe } from './entities/recipe';
-import { Rate } from './entities/rate';
 import { seedDatabase } from './utils/seed-db';
 import { Context } from './resolvers/types/context';
-import { User } from './entities/user';
+import { createSchema } from './utils/app-utils';
 
 TypeORM.useContainer(Container);
 
@@ -19,11 +15,11 @@ async function bootstrap() {
     const dbOptions: TypeORM.ConnectionOptions = {
       type: 'sqlite',
       database: `${path.join(__dirname, '../', 'db')}/db.sqlite`,
-      entities: [Recipe, Rate, User],
+      entities: ['src/entities/*'],
       synchronize: true,
       logger: 'advanced-console',
       logging: 'all',
-      dropSchema: true,
+      dropSchema: false,
       cache: true,
     };
 
@@ -31,10 +27,7 @@ async function bootstrap() {
 
     const { defaultUser } = await seedDatabase();
 
-    const schema = await TypeGraphQL.buildSchema({
-      resolvers: [RecipeResolver],
-      container: Container,
-    });
+    const schema = await createSchema();
 
     const context: Context = { user: defaultUser };
 
